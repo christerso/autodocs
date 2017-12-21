@@ -1,0 +1,18 @@
+hash: d4592d2cef918daf8fc089853a4e4de541cd112b897341cb55890a16ef51d13c
+updated: 2017-12-21T16:54:22.698857+01:00
+imports:
+- name: github.com/Jeffail/gabs
+  version: 44cbc27138518b15305cb3eef220d04f2d641b9b
+- name: github.com/nlopes/slack
+  version: c0ac548498d6c211ad9cb09ecb58c576d8ba602e
+- name: github.com/shomali11/commander
+  version: 28d6c2ce5c395b5f400c988defeaffb2c22cd1a9
+- name: github.com/shomali11/proper
+  version: 0244d42823dce3e0cd5e74e11c9ab1cb92013cbe
+- name: github.com/shomali11/slacker
+  version: 66c5bccdc747bf26bd0d5d5431b109563dfdcb75
+- name: golang.org/x/net
+  version: 4876518f9e71663000c348837735820161a42df7
+  subpackages:
+  - websocket
+testImports: []

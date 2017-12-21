@@ -1,0 +1,4 @@
+package: santa
+import:
+- package: github.com/Jeffail/gabs
+- package: github.com/shomali11/slacker
