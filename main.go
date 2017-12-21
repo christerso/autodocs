@@ -51,14 +51,14 @@ func handle(request *slacker.Request, response slacker.ResponseWriter) {
 		fmt.Println(err)
 	}
 
-	results := []string{}
+	results := make(map[string]string)
 
 	children, _ := jsonParsed.S("docs").Children()
 	for _, child := range children {
 		doc := child.Data().(map[string]interface{})
 
 		if strings.Contains(doc["text"].(string), word) {
-			results = append(results, docsServer + doc["location"].(string))
+			results[docsServer + doc["location"].(string)] = doc["title"].(string)
 		}
 	}
 
@@ -71,7 +71,7 @@ func handle(request *slacker.Request, response slacker.ResponseWriter) {
 		fmt.Println(err)
 	}
 
-	response.Reply(strings.Trim(string(b), "[]"))
+	response.Reply(strings.Trim(string(b), "{}"))
 }
 
 func getIndexFile() ([]byte, error) {
