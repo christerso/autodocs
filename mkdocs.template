@@ -4,6 +4,7 @@ theme:
   palette:
       primary: red
       accent: red
+  logo: img/xmastree.png
 extra_javascript:
   - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
