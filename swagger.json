@@ -1,0 +1,774 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Category Service API",
+    "description": "#### Returns Category information"
+  },
+  "schemes": [
+    "http"
+  ],
+  "host": "category-service-staging.home24.net",
+  "basePath": "/",
+  "paths": {
+    "/": {
+      "get": {
+        "parameters": [],
+        "summary": "Lists all endpoints",
+        "description": "this endpoint lists all available endpoints",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "parameters": [],
+        "summary": "Returns the string \"PONG\" to validate a running service",
+        "description": "this endpoint will be requested by monitoring systems to check the health of this service",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/meta": {
+      "get": {
+        "parameters": [],
+        "summary": "Returns meta information about the running app",
+        "description": "Returns meta information about the running app.\n\n(useful for debugging and deployment)\n\n* commit hash\n\n* git branch\n\n* build number\n\n* build time",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/categories/breadcrumbs": {
+      "get": {
+        "summary": "Returns category bread crumbs",
+        "description": "Returns category bread crumbs in JSON\n\n",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ids",
+            "required": true,
+            "type": "array",
+            "description": "Category Ids"
+          },
+          {
+            "in": "query",
+            "name": "appDomain",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "appDomain"
+          },
+          {
+            "in": "query",
+            "name": "locale",
+            "required": false,
+            "type": "string",
+            "default": "de_DE",
+            "description": "locale"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/Breadcrumb"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "summary": "Returns category main tree - Tree View",
+        "description": "Returns full category tree in JSON - Tree View\n\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "description": "Category Id"
+          },
+          {
+            "in": "query",
+            "name": "appDomain",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "appDomain"
+          },
+          {
+            "in": "query",
+            "name": "locale",
+            "required": false,
+            "type": "string",
+            "default": "de_DE",
+            "description": "locale"
+          },
+          {
+            "in": "query",
+            "name": "showInactive",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description": "show inactive categories"
+          },
+          {
+            "in": "query",
+            "name": "showEmpty",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description": "show categories with articleCount == 0"
+          },
+          {
+            "in": "query",
+            "name": "replaceRedirects",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description": "replace categories with the redirects with its targets"
+          },
+          {
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "default": 1,
+            "type": "integer",
+            "description": "depth of childrenCategories to return.\n\n(valid values: 1, 2, 3, 4)"
+          },
+          {
+            "in": "query",
+            "name": "leftMenuId",
+            "required": false,
+            "type": "integer",
+            "description": "id of root category to build left menu (minimal template)"
+          },
+          {
+            "in": "query",
+            "name": "leftMenuDepth",
+            "default": 1,
+            "required": false,
+            "type": "integer",
+            "description": "level of depth for left menu"
+          },
+          {
+            "in": "query",
+            "name": "breadcrumbsId",
+            "required": false,
+            "type": "integer",
+            "description": "category id for breadcrumbs (minimal template)"
+          },
+          {
+            "in": "query",
+            "name": "foldId",
+            "required": false,
+            "type": "array",
+            "description": "do not unfold children list on specified categories in minimal "
+          },
+          {
+            "in": "query",
+            "name": "showIn",
+            "required": false,
+            "type": "array",
+            "description": "If not empty, expose categories, which contains at least one of specified values."
+          },
+          {
+            "in": "query",
+            "name": "showOnDevice",
+            "required": false,
+            "type": "array",
+            "description": "(eq to current doNotShowOnDevice != 'mobile-app') if not empty, expose categories, where device name is not blacklisted."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryTree": {
+                  "$ref": "#/definitions/Category"
+                },
+                "leftMenuTree": {
+                  "$ref": "#/definitions/CategoryMinimal"
+                },
+                "breadcrumbs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/CategoryMinimal"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}/breadcrumbs": {
+      "get": {
+        "summary": "Returns category bread crumbs",
+        "description": "Returns category bread crumbs in JSON\n\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "description": "Category Id"
+          },
+          {
+            "in": "query",
+            "name": "appDomain",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "appDomain"
+          },
+          {
+            "in": "query",
+            "name": "locale",
+            "required": false,
+            "type": "string",
+            "default": "de_DE",
+            "description": "locale"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryTree": {
+                  "$ref": "#/definitions/Category"
+                },
+                "leftMenuTree": {
+                  "$ref": "#/definitions/CategoryMinimal"
+                },
+                "breadcrumbs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/CategoryMinimal"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Returns category tree - List View",
+        "description": "Returns shorter category tree in JSON - List View\n\n",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ids",
+            "required": true,
+            "type": "array",
+            "description": "Category Ids"
+          },
+          {
+            "in": "query",
+            "name": "appDomain",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "appDomain"
+          },
+          {
+            "in": "query",
+            "name": "locale",
+            "required": false,
+            "type": "string",
+            "default": "de_DE",
+            "description": "locale"
+          },
+          {
+            "in": "query",
+            "name": "showInactive",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description": "show inactive categories"
+          },
+          {
+            "in": "query",
+            "name": "showEmpty",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description": "show categories with articleCount == 0"
+          },
+          {
+            "in": "query",
+            "name": "replaceRedirects",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description": "replace categories with the redirects with its targets"
+          },
+          {
+            "in": "query",
+            "name": "showOnDevice",
+            "required": false,
+            "type": "array",
+            "description": "if not empty, expose categories, where device name is not blacklisted\n\n(eq to current doNotShowOnDevice != 'mobile-app')"
+          },
+          {
+            "in": "query",
+            "name": "showIn",
+            "required": false,
+            "type": "array",
+            "description": "if not empty, expose categories, which contains at least one of specified values.\n\n(e.g.: showIn=topMenu&showIn=subMenu])"
+          },
+          {
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "default": 1,
+            "type": "integer",
+            "description": "depth of childrenCategories to return.\n\n(valid values: 1, 2, 3, 4)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "listView": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/CategoryMinimal"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "import and update categories",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "JsonObject as string to store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "description": "this path is used to instert and update category data\n\n",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/categories/childids": {
+      "get": {
+        "summary": "Subcategories' ids",
+        "description": "Returns ids of subcategories of requested categories",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ids",
+            "required": true,
+            "type": "array",
+            "description": "Category Ids"
+          },
+          {
+            "in": "query",
+            "name": "appDomain",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "appDomain"
+          },
+          {
+            "in": "query",
+            "name": "locale",
+            "required": false,
+            "type": "string",
+            "default": "de_DE",
+            "description": "locale"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "parameters": [],
+        "summary": "documentation",
+        "description": "this endpoint returns the swagger generated documentation of this service",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "on reading errors",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Breadcrumb": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+            "id": {"type": "integer"},
+            "url": {"type": "string"},
+            "name": {"type": "string"}
+        }
+      }
+    },
+    "Error": {
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Category":{
+      "properties":{
+        "id":{
+          "type":"integer"
+        },
+        "parentCategoryId":{
+          "type":"integer"
+        },
+        "position":{
+          "type":"integer"
+        },
+        "depth":{
+          "type":"integer"
+        },
+        "level":{
+          "type":"integer",
+          "description": "Nesting level of a node in a tree. The root node has level 0.",
+          "minimum": 0
+        },
+        "articleCount":{
+          "type":"integer"
+        },
+        "appDomainId":{
+          "type":"integer"
+        },
+        "locale":{
+          "type":"string"
+        },
+        "hasChildren":{
+          "type":"boolean"
+        },
+        "isActive":{
+          "type":"boolean"
+        },
+        "isLeaf":{
+          "type":"boolean"
+        },
+        "title":{
+          "type":"string"
+        },
+        "shortTitle":{
+          "type":"string"
+        },
+        "urlPath":{
+          "type":"string"
+        },
+        "redirectUrl":{
+          "type":"string"
+        },
+        "redirectCategoryId":{
+          "type":"integer"
+        },
+        "redirectCategory":{
+          "$ref":"#/definitions/CategoryMinimal"
+        },
+        "mobileCategoryIcon":{
+          "type":"string"
+        },
+        "mobileCategoryTeaser":{
+          "type":"string"
+        },
+        "visualNavigationImage":{
+          "type":"string"
+        },
+        "navigationTextTop":{
+          "type":"string"
+        },
+        "navigationTextBottom":{
+          "type":"string"
+        },
+        "fullCms":{
+          "type":"string"
+        },
+        "seoCms":{
+          "type":"string"
+        },
+        "shortCms":{
+          "type":"string"
+        },
+        "adserverCms":{
+          "type":"string"
+        },
+        "checksum":{
+          "type":"string"
+        },
+        "childrenCategoryIds":{
+          "type":"array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "doNotShowOnDevice":{
+          "type":"array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "showIn":{
+          "type":"array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filters":{
+          "type":"array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "childrenCategories":{
+          "type":"array",
+          "items":{
+            "$ref":"#/definitions/Category"
+          }
+        },
+        "internationalLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InternationalLink"
+          }
+        },
+
+        "metaTitle": { "type": "string" },
+        "metaDescription": { "type": "string" },
+        "metaIndex": { "type": "string" },
+        "metaFollow": { "type": "string" },
+        "metaCanonical": { "type": "string" },
+
+        "visualNavigationEnabled": { "type": "boolean" },
+        "visualNavigationAdsBlock": { "type": "string" },
+        "visualNavigationSideBlock": { "type": "string" },
+        "visualNavigationHeadlineBlock": { "type": "string" },
+        "visualNavigationTopCms": { "type": "string" },
+
+        "hideProducts": { "type": "boolean" },
+        "seoCategoryBreadcrumbName": { "type": "string" },
+        "keyCampaign1Cms": { "type": "string" },
+        "keyCampaign2Cms": { "type": "string" },
+        "styleAndTrendsCms": { "type": "string" },
+        "topProductCms": { "type": "string" },
+        "hideProductsInParent": { "type": "boolean" }
+      }
+    },
+    "CategoryMinimal":{
+      "properties":{
+        "id":{
+          "type":"integer"
+        },
+        "depth":{
+          "type":"integer"
+        },
+        "level":{
+          "type":"integer",
+          "description": "Nesting level of a node in a tree. The root node has level 0.",
+          "minimum": 0
+        },
+        "position":{
+          "type":"integer"
+        },
+        "articleCount":{
+          "type":"integer"
+        },
+        "isLeaf":{
+          "type":"boolean"
+        },
+        "title":{
+          "type":"string"
+        },
+        "shortTitle":{
+          "type":"string"
+        },
+        "urlPath":{
+          "type":"string"
+        },
+        "redirectUrl":{
+          "type":"string"
+        },
+        "navigationTextTop":{
+          "type":"string"
+        },
+        "navigationTextBottom":{
+          "type":"string"
+        },
+        "visualNavigationImage":{
+          "type":"string"
+        },
+        "mobileCategoryIcon": { "type": "string" },
+        "mobileCategoryTeaser": { "type": "string" },
+        "seoCategoryBreadcrumbName": { "type": "string" },
+        "childrenCategories":{
+          "type":"array",
+          "items":{
+            "$ref":"#/definitions/CategoryMinimal"
+          }
+        }
+      }
+    },
+    "InternationalLink": {
+      "properties": {
+        "appDomainId": {
+          "type": "integer"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "urlPath": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

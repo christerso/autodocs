@@ -1,0 +1,5 @@
+# Put the build dir outside of this dir.
+# Never use ~ in this path, but use the full path
+# For example: build_dir: /home/christer/base 
+build_dir: /tmp/build
+

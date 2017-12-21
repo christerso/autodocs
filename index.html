@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/parcel-docs/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/parcel-docs/favicon-16x16.png" sizes="16x16" />
+  <link href="https://s3-eu-west-1.amazonaws.com/parcel-docs/typography.css" media="screen" rel="stylesheet" oldtype="text/css"/>
+  <link href="https://s3-eu-west-1.amazonaws.com/parcel-docs/reset.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="https://s3-eu-west-1.amazonaws.com/parcel-docs/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="https://s3-eu-west-1.amazonaws.com/parcel-docs/reset.css" media="print" rel="stylesheet" type="text/css"/>
+  <link href="https://s3-eu-west-1.amazonaws.com/parcel-docs/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/jquery-1.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/jquery_003.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/jquery_002.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/jquery.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/handlebars-2.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/underscore-min.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/backbone-min.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/swagger-ui.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/highlight.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/marked.js" type="text/javascript"></script>
+  <script src="https://s3-eu-west-1.amazonaws.com/parcel-docs/swagger-oauth.js" type="text/javascript"></script>
+
+  <!-- Some basic translations -->
+  <!-- <script src="lang/translator.js" type="text/javascript"></script> -->
+  <!-- <script src="lang/ru.js" type="text/javascript"></script> -->
+  <!-- <script src="lang/en.js" type="text/javascript"></script> -->
+  <style type="text/css">
+    .swagger-section #header form#api_selector {
+      display: none !IMPORTANT;
+    }
+  </style>
+  <script type="text/javascript">
+    var swJson = {{ .swaggerjson }};
+  </script>
+  <script type="text/javascript">
+    $(function () {
+      var doc = jQuery.parseJSON(swJson);
+      // overwrites current host with app-host
+      doc.host = window.location.host;
+      document.title = doc.info.title;
+
+      var swaggerUi = new SwaggerUi({
+        url: window.location.origin,
+        spec: doc,
+        dom_id:"swagger-ui-container",
+        validatorUrl: null,
+        docExpansion: 'list'
+      });
+
+      swaggerUi.load();
+    });
+  </script>
+</head>
+
+<body class="swagger-section">
+<div id="header">
+  <div class="swagger-ui-wrap">
+    <img style="height: 30px;" src="http://www.home24.io/wp-content/uploads/2015/09/home24-tech-logo-02.png" title="home24.de" />
+    <form id="api_selector">
+      <div class="input"><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
+      <div class="input"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+      <div class="input"><a id="explore" href="#" data-sw-translate>Explore</a></div>
+    </form>
+  </div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</body>
+</html>

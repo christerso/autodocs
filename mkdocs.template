@@ -1,0 +1,15 @@
+site_name: Core Docs
+theme:
+  name: 'material' 
+  palette:
+      primary: red
+      accent: red
+extra_javascript:
+  - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+markdown_extensions:
+  - smarty
+  - sane_lists
+  - pyembed.markdown
+pages:
+- 'Home': 'index.md'
