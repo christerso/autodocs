@@ -78,8 +78,8 @@ class ScanMarkDown(object):
                         # This makes the paths index slightly different
                         name = os.path.dirname(match).split('/')[-1].replace('_', ' ')
                         if name == ".":
-                            # A markdown file created at the top of the repo will be put into the "SDA" menu
-                            parent_dir = "SDA"
+                            # A markdown file created at the top of the repo will be put into the "Home24" menu
+                            parent_dir = "Home24"
                         else:
                             parent_dir = os.path.dirname(match).split('/')[-2]
                         if parent_dir == "docs":
@@ -99,8 +99,8 @@ class ScanMarkDown(object):
                         # If the directory name is the same as the top dir, don't add it again.
                         directory_name = ""
                         # A top level markdown file needs to be handled a bit differently to not have a "." as a directory name.
-                        # This is the reason for the "SDA" check.
-                        if v[0] == key or key == "SDA":
+                        # This is the reason for the "Home24" check.
+                        if v[0] == key or key == "Home24":
                             directory_name = ""
                         else:
                             directory_name = self.first_char_to_upper(v[0]) + ' - '
